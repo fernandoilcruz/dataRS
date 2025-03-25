@@ -2,13 +2,22 @@
 % Please edit documentation in R/set_api_key.R
 \name{set_api_key}
 \alias{set_api_key}
-\title{Title}
+\title{Set API key as environment variable}
 \usage{
 set_api_key(key)
 }
 \arguments{
 \item{key}{}
 }
+\value{
+No return value. Called for side effects only (sets an environment variable).
+}
 \description{
-Title
+Set API key as environment variable
+}
+\examples{
+\dontrun{
+}
+
+
 }
