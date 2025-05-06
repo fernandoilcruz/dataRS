@@ -13,5 +13,8 @@ data.frame
 Get list of unity of measurement from system
 }
 \examples{
+\dontrun{
 um()
+}
+
 }

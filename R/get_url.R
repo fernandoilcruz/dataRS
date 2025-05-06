@@ -1,13 +1,10 @@
-
-
-get_api_key <- function() {
-  key <- Sys.getenv("MY_API_KEY")
-  if (is.null(key)) {
-    stop("API key not found. Please set it using set_api_key().", call. = FALSE)
-  }
-  return(key)
-}
-
+#' Build API URL (internal)
+#'
+#' Internal helper that constructs the full API URL using the provided endpoint name.
+#'
+#' @param info A string indicating which endpoint to access.
+#' @return A full URL string.
+#' @noRd
 get_url <- function(info) {
 
   api_key <- get_api_key()
@@ -25,7 +22,7 @@ get_url <- function(info) {
             "unid_medida")
 
   if(!info %in% infos){stop(paste0("Error: the info argument is only available for "),
-                        paste(ags, collapse = ", "))}
+                        paste(infos, collapse = ", "))}
 
   # Construct the URL
   root_url <- "https://datavis.dee.rs.gov.br/api/"
@@ -38,15 +35,4 @@ get_url <- function(info) {
   base_url <- paste0(root_url, info_url, key_url)
 
   return(base_url)
-
-  # # Make the request
-  # response <- httr::GET(full_url)
-  #
-  # # Check for errors
-  # if (httr::status_code(response) != 200) {
-  #   stop("Failed to fetch data: ", httr::content(response, "text"), call. = FALSE)
-  # }
-  #
-  # # Parse and return the content
-  # return(httr::content(response, "parsed"))
 }

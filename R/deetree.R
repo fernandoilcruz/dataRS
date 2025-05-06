@@ -12,14 +12,16 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' deetree()
+#' }
 #'
 deetree <-
   function(){
 
     url_arvore <- get_url(info = "arvore")
 
-    api <- httr::GET(url_arvore)
+    api <- httr::GET(url_arvore, timeout(1000000), config = config(ssl_verifypeer = 0))
 
     api_content <- base::rawToChar(api$content)
 

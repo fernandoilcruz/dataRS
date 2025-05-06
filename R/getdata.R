@@ -15,7 +15,7 @@
 #'
 #' @return a data.frame
 #'
-#' @import jsonlite tidyverse
+#' @import jsonlite dplyr tidyverse
 #' @importFrom utils data
 #'
 #'
@@ -23,19 +23,21 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' #Example 1
 #' my_data <- getdata(var_id = 4603,ag = "corede",period = c(2016,2017), add_labels = TRUE)
 #' print(my_data)
-#' print(my_data$data)
 #'
 #' #Example 2
-#' my_data <- getdata(var_id = 4603,ag = "corede",period = "all")
-#' my_data <- getdata(var_id = 1686,ag = "corede",period = c(2010:2015))
+#' my_data <- getdata(var_id = 4603,geo_id = 2, ag = "corede",period = "all")
+#' print(my_data)
+#'}
 #'
 getdata <-
   function(var_id,
            ag,
            period = "all",
+           geo_id = NULL,
            sort = "ASC",
            add_labels = FALSE){
 
@@ -61,23 +63,51 @@ getdata <-
     # sort = "ASC"
 
     #output
-    x<-
-    var_id |>
-      purrr::map_df(function(z){
-        paste0(get_url(info = "data"),
-               "&id=",
-               z,
-               "&ag=",
-               ag,
-               "&periodo=",
-               period |> paste0(collapse = ","),
-               "&sort=",
-               sort
-        ) |>
-          jsonlite::fromJSON() |>
-          tidyr::unnest(cols = data) |>
-          dplyr::mutate(var_id = z)
-      })
+    if(is.null(geo_id)){
+      x<-
+        var_id |>
+        purrr::map_df(function(z){
+          paste0(get_url(info = "data"),
+                 "&id=",
+                 z,
+                 "&ag=",
+                 ag,
+                 "&periodo=",
+                 period |> paste0(collapse = ","),
+                 "&sort=",
+                 sort,
+                 "&formato=json"
+          ) |>
+            httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+            content("text", encoding = "UTF-8") |>
+            jsonlite::fromJSON() |>
+            tidyr::unnest(cols = data) |>
+            dplyr::mutate(var_id = z)
+        })
+    }else{
+      x<-
+        var_id |>
+        purrr::map_df(function(z){
+          paste0(get_url(info = "data"),
+                 "&id=",
+                 z,
+                 "&ag=",
+                 ag,
+                 "&periodo=",
+                 period |> paste0(collapse = ","),
+                 "&filtro=",
+                 geo_id,
+                 "&sort=",
+                 sort,
+                 "&formato=json"
+          ) |>
+            httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+            content("text", encoding = "UTF-8") |>
+            jsonlite::fromJSON() |>
+            tidyr::unnest(cols = data) |>
+            dplyr::mutate(var_id = z)
+        })
+    }
 
     x <-
       x |>
@@ -86,12 +116,14 @@ getdata <-
                     "value" = "valor",
                     "unit" = "un_medida",
                     "note" = "nota") |>
+      dplyr::mutate(unit = as.integer(unit)) |>
       dplyr::select(var_id,geo_id,year,value, unit, note)
 
 
     #add labels
     vars1 <- vars()
     geos1 <- geoagreg(ag = ag)
+    units1 <- um()
 
     if(add_labels == TRUE){
       x <-
@@ -100,7 +132,11 @@ getdata <-
                          by = c("var_id" = "var_id")) |>
         dplyr::left_join(geos1,
                          by = c("geo_id" = "geo_id")) |>
-        dplyr::select(var_id, var_name, geo_id, geo_name, year, value, unit, note)
+        dplyr::left_join(units1,
+                         by = c("unit" = "um_id")) |>
+
+        dplyr::select(var_id, var_name, geo_id, geo_name, year, value, um_name, note) |>
+        dplyr::rename(unit = um_name)
     }
 
     return(x)

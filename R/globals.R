@@ -14,4 +14,7 @@ utils::globalVariables(c("descricao",
                          "unit",
                          "value",
                          "var_name",
-                         "year"))
+                         "year",
+                         "um_name",
+                         "name_id_source",
+                         "description"))

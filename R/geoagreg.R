@@ -18,9 +18,11 @@
 #' @importFrom utils data
 #'
 #' @examples
+#' \dontrun{
 #' geoagreg()
 #' geoagreg(ag = "municipio")
 #' geoagreg(ag = "corede", sort = "DESC")
+#' }
 #'
 geoagreg <-
   function(ag = "municipio",
@@ -52,6 +54,8 @@ geoagreg <-
     #output
     x <-
       url |>
+      httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+      content("text", encoding = "UTF-8") |>
       jsonlite::fromJSON() |>
       tibble::as_tibble() |>
       dplyr::rename("geo_id" = "id",

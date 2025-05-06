@@ -18,7 +18,9 @@ a tibble.
 Check ID and name of all geographic aggregations in selected periods. Default is all periods.
 }
 \examples{
+\dontrun{
 geoagregall2()
 geoagregall2(period = 2010)
+}
 
 }

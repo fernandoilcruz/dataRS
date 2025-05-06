@@ -16,7 +16,9 @@ A tibble
 Check the details of a variable, by searching for it's ID.
 }
 \examples{
+\dontrun{
 vardetails(var_id = 4049)
-vardetails(var_id = c(4049,3755, 4784))
+vardetails(var_id = c(4049,3755,4784))
+}
 
 }

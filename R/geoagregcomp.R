@@ -18,11 +18,19 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' #' #First run geoagreg() to check the aggregation id of interest
+#' geoagreg(ag = "meso")
+#' #Let's get id=1 (Centro Ocidental Rio-Grandense) and year 2020 as example.
+#' #Run:
+#' geoagregcomp(ag = "meso", geo_id = 10, period = 2020)
+#'
 #' #First run geoagreg() to check the aggregation id of interest
 #' geoagreg(ag = "meso")
 #' #Let's get id=1 (Centro Ocidental Rio-Grandense) and year 2020 as example.
 #' #Run:
 #' geoagregcomp(ag = "meso", geo_id = 10, period = 2020)
+#'}
 #'
 geoagregcomp <-
   function(ag = "corede",
@@ -62,6 +70,8 @@ geoagregcomp <-
     #output
     x <-
       url |>
+      httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+      content("text", encoding = "UTF-8") |>
       jsonlite::fromJSON() |>
       tibble::as_tibble() |>
       dplyr::rename("geo_id" = "id",

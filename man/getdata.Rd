@@ -4,7 +4,14 @@
 \alias{getdata}
 \title{Download data from DEEDados}
 \usage{
-getdata(var_id, ag, period = "all", sort = "ASC", add_labels = FALSE)
+getdata(
+  var_id,
+  ag,
+  period = "all",
+  geo_id = NULL,
+  sort = "ASC",
+  add_labels = FALSE
+)
 }
 \arguments{
 \item{var_id}{The variable's ID.}
@@ -31,13 +38,14 @@ a data.frame
 This function allows the user to download data from DEEDados API using R.
 }
 \examples{
+\dontrun{
 #Example 1
 my_data <- getdata(var_id = 4603,ag = "corede",period = c(2016,2017), add_labels = TRUE)
 print(my_data)
-print(my_data$data)
 
 #Example 2
-my_data <- getdata(var_id = 4603,ag = "corede",period = "all")
-my_data <- getdata(var_id = 1686,ag = "corede",period = c(2010:2015))
+my_data <- getdata(var_id = 4603,geo_id = 2, ag = "corede",period = "all")
+print(my_data)
+}
 
 }

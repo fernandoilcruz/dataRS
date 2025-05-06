@@ -13,6 +13,8 @@ A Json Tree
 This function function plots the DEEDados tree. It is useful for exploring the available datasets at DEEDados.
 }
 \examples{
+\dontrun{
 deetree()
+}
 
 }

@@ -12,8 +12,10 @@
 #' @importFrom utils data
 #'
 #' @examples
+#' \dontrun{
 #' geoagregall2()
 #' geoagregall2(period = 2010)
+#' }
 #'
 geoagregall2 <-
   function(period = NULL, key){
@@ -47,6 +49,8 @@ geoagregall2 <-
     #output
     x <-
       url |>
+      httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+      content("text", encoding = "UTF-8") |>
       jsonlite::fromJSON() |>
       tibble::as_tibble() |>
       dplyr::rename("geo_id_municipio" = "id_municipio",

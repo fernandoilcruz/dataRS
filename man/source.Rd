@@ -4,7 +4,7 @@
 \alias{source}
 \title{Source}
 \usage{
-source(key)
+source()
 }
 \value{
 data.frame
@@ -13,6 +13,8 @@ data.frame
 Get sources list from system
 }
 \examples{
+\dontrun{
 source()
+}
 
 }

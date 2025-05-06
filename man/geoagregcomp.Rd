@@ -26,10 +26,18 @@ data.frame
 The geographic aggregation composition. Municipalities are the minimum aggregation level available
 }
 \examples{
+\dontrun{
+#' #First run geoagreg() to check the aggregation id of interest
+geoagreg(ag = "meso")
+#Let's get id=1 (Centro Ocidental Rio-Grandense) and year 2020 as example.
+#Run:
+geoagregcomp(ag = "meso", geo_id = 10, period = 2020)
+
 #First run geoagreg() to check the aggregation id of interest
 geoagreg(ag = "meso")
 #Let's get id=1 (Centro Ocidental Rio-Grandense) and year 2020 as example.
 #Run:
 geoagregcomp(ag = "meso", geo_id = 10, period = 2020)
+}
 
 }

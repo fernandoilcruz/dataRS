@@ -7,13 +7,13 @@
 set_api_key(key)
 }
 \arguments{
-\item{key}{}
+\item{key}{The API key}
 }
 \value{
 No return value. Called for side effects only (sets an environment variable).
 }
 \description{
-Set API key as environment variable
+This function allows users to set the API key.
 }
 \examples{
 \dontrun{

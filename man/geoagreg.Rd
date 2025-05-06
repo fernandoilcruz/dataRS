@@ -25,8 +25,10 @@ a data.frame.
 Check ID and name of geographic aggregations. For municipalities, latitude and longitude are also available.
 }
 \examples{
+\dontrun{
 geoagreg()
 geoagreg(ag = "municipio")
 geoagreg(ag = "corede", sort = "DESC")
+}
 
 }
