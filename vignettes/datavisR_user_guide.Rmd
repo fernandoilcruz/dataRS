@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ## Why an R package?
 
-datavisR is an R interface for the [DataVis](https://datavis.dee.rs.gov.br/) API. DataVis is a comprehensive repository of socioeconomic data for the state of Rio Grande do Sul, created and maintained by the Department of Economics and Statistics ([DEE/SPGG-RS](https://dee.rs.gov.br/inicial)) at the Planning, Governance and Management. Besides being extremely intuitive and user-friendly for data downloads, the implementation of an API turned this task even faster and more efficient. Data analysts interested in the state's multiple sets of socioeconomic data have now a more appropriate tool to work with. R users, in particular, can benefit from this using datavisR, an R package that provides an easy way to access the DataVis API.
+datavisR is an R interface for the [DataVis](https://datavis.dee.rs.gov.br/) API. DataVis is a comprehensive repository of socioeconomic data for the state of Rio Grande do Sul, created and maintained by the Department of Economics and Statistics ([DEE/SPGG-RS](https://dee.rs.gov.br/inicial)) - Planning, Governance and Management Office at State Government of Rio Grande do Sul. Besides being extremely intuitive and user-friendly for data downloads, the implementation of an API turned this task even faster and more efficient. Data analysts interested in the state's multiple sets of socioeconomic data have now a more appropriate tool to work with. R users, in particular, can benefit from this using datavisR, an R package that provides an easy way to access the DataVis API.
 
 ## Installation via GitHub
 
@@ -36,6 +36,8 @@ library(datavisR)
 ## Main Functions
 
 The current version of deedR contains the following functions for users:
+
+* `set_api_key`: Sets user's DataVis API key.
 
 * `geoagreg`: Checks ID and name of geographic aggregations. For municipalities, latitude and longitude are also available.
 
@@ -54,19 +56,20 @@ The current version of deedR contains the following functions for users:
 * `vars`: Lists, filters and sorts variables' ID and names.
 
 
-##The whole story in a glimpse
+## The whole story in a glimpse
 
-#Step 1:
+### Step 1:
 Generate your API key at [https://datavis.dee.rs.gov.br/](https://datavis.dee.rs.gov.br/).
 
-#Step 2:
+### Step 2:
 Set your API key with the _set_api_key_ function.
 
 ```{r}
 #datavisR::set_api_key("your_api_key_here")
+datavisR::set_api_key("278c8a820d895f04d1c00805c225b031")
 ```
 
-#Step 3:
+### Step 3:
 Choose a regional level and get it's ID. You can do this by using the geoagreg() and geoagrecomp() functions separately, or all at once with the geoagregall2(). For instance, let's get the ID for the municipality of Porto Alegre.
 
 ```{r}
@@ -77,19 +80,19 @@ user_geo_id <-
   dplyr::pull()
 ```
 
-#Step 4:
+### Step 4:
 Choose the variable you want to explore and get it's ID. Let's say, a node that contains both "Soja" and "Rendimento".
 
 ```{r}
 user_var_id <- 
   datavisR::vars() |>
-  dplyr::filter(str_detect(var_name, c("Soja")) & str_detect(var_name, "Rendimento")) |>
+  dplyr::filter(stringr::str_detect(var_name, c("Soja")) & stringr::str_detect(var_name, "Rendimento")) |>
   dplyr::select(var_id) |>
   dplyr::pull()
 ```
 
 
-#Step 5:
+### Step 5:
 Get the data! You can use the geo_id filter or not!
 
 ```{r}
