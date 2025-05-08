@@ -243,8 +243,7 @@ my_data <-
            "var_id" = "var_id",
            "var_name" = "var_name",
            "year" = "year",
-           "um_name" = "um_name",
-           "um_acronym" = "um_acronym",
+           "unit" = "unit",
            "note" = "note")
   ) |> 
   dplyr::rename(value_micro = value) |>
@@ -255,8 +254,7 @@ my_data <-
            "var_id" = "var_id",
            "var_name" = "var_name",
            "year" = "year",
-            "um_name" = "um_name",
-           "um_acronym" = "um_acronym",
+            "unit" = "unit",
            "note" = "note")
   ) |> 
   dplyr::rename(value_meso = value) |>
@@ -267,8 +265,7 @@ my_data <-
            "var_id" = "var_id",
            "var_name" = "var_name",
            "year" = "year",
-           "um_name" = "um_name",
-           "um_acronym" = "um_acronym",
+           "unit" = "unit",
            "note" = "note")
   ) |>
   dplyr::rename(value_corede = value) |>
@@ -279,8 +276,7 @@ my_data <-
            "var_id" = "var_id",
            "var_name" = "var_name",
            "year" = "year",
-            "um_name" = "um_name",
-           "um_acronym" = "um_acronym",
+           "unit" = "unit",
            "note" = "note")
   ) |>
   dplyr::rename(value_estado = value) |>
