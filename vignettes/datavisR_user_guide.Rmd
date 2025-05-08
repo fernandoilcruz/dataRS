@@ -35,7 +35,7 @@ library(datavisR)
 
 ## Main Functions
 
-The current version of deedR contains the following functions for users:
+The current version of datavisR contains the following functions for users:
 
 * `set_api_key`: Sets user's DataVis API key.
 
@@ -126,9 +126,6 @@ Idese is the acronym for Índice de Desenvolvimento Socioeconômico, a synthetic
 #### a) Search for the information you need and download it
 Let's look up for all municipalities in Corede Hortênsias, where lies the city of Gramado.
 ```{r}
-library(devtools)
-devtools::install_github("fernandoilcruz/datavisR")
-
 datavisR::geoagreg(ag = "corede")
 ```
 
@@ -137,7 +134,7 @@ Corede Hortênsias has parameter id = 7.
 Which municipalities belong to this Corede?
 
 ```{r}
-deedR::geoagregcomp(ag = "corede", geo_id = 7)
+datavisR::geoagregcomp(ag = "corede", geo_id = 7)
 ```
 
 As we see, the Corede Hortênsias is composed by seven (just a coincidence) municipalities.
@@ -146,8 +143,10 @@ Now, lets dig in the Idese informations, ruling out the 2013 revision.
 
 ```{r}
 vars_corede_ex_2013 <-
-  deedR::vars(contains = "Idese") |> 
-  dplyr::filter(stringr::str_detect(string = var_name, pattern = "2013", negate = TRUE))
+  datavisR::vars() |> 
+  dplyr::filter(
+    stringr::str_detect(var_name,"Idese"),
+    stringr::str_detect(string = var_name, pattern = "2013", negate = TRUE))
 
 vars_corede_ex_2013
 ```
@@ -161,46 +160,49 @@ ids <-
   dplyr::pull()
   
 
-deedR::vardetails(var_id = ids)
+datavisR::vardetails(var_id = ids)
 ```
 
 Ok. Now we know what we want, let us download the data.
 
 Take a closer look to the function with help:
 ```{r eval = FALSE}
-help(package = "deedR", "getdata")
+help(package = "datavisR", "getdata")
 ```
 
 Choose the appropriate options and download the data:
 
 ```{r}
 data_muni <-  
-  deedR::getdata(var_id = ids, ag = "municipio", period = "all", add_names = TRUE) |>
+  datavisR::getdata(var_id = ids, ag = "municipio", period = "all", add_labels = TRUE) |>
   dplyr::mutate(value = 
                   value |>
                   stringr::str_replace_all(",","\\.") |>
                   as.numeric())
   
-data_corede <- deedR::getdata(var_id = ids, ag = "corede", period = "all", add_names = TRUE) |>
+data_corede <- 
+  datavisR::getdata(var_id = ids, ag = "corede", period = "all", add_labels = TRUE) |>
   dplyr::mutate(value = 
                   value |>
                   stringr::str_replace_all(",","\\.") |>
                   as.numeric())
 
-data_meso <- deedR::getdata(var_id = ids, ag = "meso", period = "all", add_names = TRUE) |>
+data_meso <- 
+  datavisR::getdata(var_id = ids, ag = "meso", period = "all", add_labels = TRUE) |>
   dplyr::mutate(value = 
                   value |>
                   stringr::str_replace_all(",","\\.") |>
                   as.numeric())
 
-data_micro <- deedR::getdata(var_id = ids, ag = "micro", period = "all", add_names = TRUE) |>
+data_micro <- 
+  datavisR::getdata(var_id = ids, ag = "micro", period = "all", add_labels = TRUE) |>
   dplyr::mutate(value = 
                   value |>
                   stringr::str_replace_all(",","\\.") |>
                   as.numeric())
 
 data_estado <- 
-  deedR::getdata(var_id = ids, ag = "estado", period = "all", add_names = TRUE) |>
+  datavisR::getdata(var_id = ids, ag = "estado", period = "all", add_labels = TRUE) |>
   dplyr::mutate(value = 
                   value |>
                   stringr::str_replace_all(",","\\.") |>
@@ -213,7 +215,7 @@ Lastly, to gather data into the same dataframe and compare them, we need a *From
 
 ```{r}
 ft_table <-
-  deedR::geoagregall2() |>
+  datavisR::geoagregall2() |>
   dplyr::select(-period)
 
 ft_table
