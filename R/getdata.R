@@ -1,17 +1,20 @@
-#' Download data from DEEDados
+#' Download data from DataRS
 #'
-#' @description This function allows the user to download data from DEEDados API using R.
+#' @description This function allows the user to download data from DataRS API using R.
 #'
 #' @param var_id The variable's ID.
-#' @param ag The regional aggregation. There are  four valid options:
+#' @param ag The regional aggregation. There are  five valid options:
 #' * "municipio" (the default): for municipalities.
 #' * "regfunc": for functional regions, a state-specific planning regionalization only applied to Rio Grande do Sul.
 #' * "corede": for coredes, a state-specific planning regionalization only applied to Rio Grande do Sul.
 #' * "meso": for IBGE's mesoregions.
 #' * "micro": for IBGE's microregions.
+#' * "estado": for the state of Rio Grande do Sul
+#' @param geo_id Optional parameter. Filters a specific municipality, regional function, corede, mesorregion, microrregion or state ID. Default is NULL.
 #' @param period The year to consult. It allows single string (ex:2010), vector(ex:c(2010,2022) or "all")
 #' @param sort If the user wants to sort from "ASC" for ascendent order or "DESC" for descendent order. Default is "ASC".
 #' @param add_labels Allows the user to add labels to the results
+#' @param var_name_break Breaks the var_name path into columns when add_labels = TRUE. Default is TRUE.
 #'
 #' @return a data.frame
 #'
@@ -25,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #' #Example 1
-#' my_data <- getdata(var_id = 4603,ag = "corede",period = c(2016,2017), add_labels = TRUE)
+#' my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=FALSE)
 #' print(my_data)
 #'
 #' #Example 2
@@ -39,7 +42,8 @@ getdata <-
            period = "all",
            geo_id = NULL,
            sort = "ASC",
-           add_labels = FALSE){
+           add_labels = FALSE,
+           var_name_break = TRUE){
 
 
     #check available arguments
@@ -52,15 +56,23 @@ getdata <-
     #if(missing(period)){stop("Error: Select a valid argument for period")}
 
     #treat var_id
-    if(any(var_id == "all")){
-      var_id <- vars() |> dplyr::select(var_id) |> dplyr::pull()
+    # if(any(var_id == "all")){
+    #   var_id <- vars() |> dplyr::select(var_id) |> dplyr::pull()
+    # }
+
+    for(i in 1:length(var_id)){
+      available_periods <- available(var_id = var_id[i], ag = ag)
+      if(period == "all" & (is.null(available_periods$period))){stop(available_periods$message)}
+      if(is.numeric(period) & (any(!period %in% available_periods))){stop(available_periods$message)}
     }
+
 
     #ARGUMENTO FORÇADO####################################ALOOOOOOOOW
     # var_id <- c(3755, 4784)
     # ag = "municipio"
     # period = "all"
     # sort = "ASC"
+    # geo_id = NULL
 
     #output
     if(is.null(geo_id)){
@@ -76,7 +88,8 @@ getdata <-
                  period |> paste0(collapse = ","),
                  "&sort=",
                  sort,
-                 "&formato=json"
+                 "&formato=json",
+                 "&use_ibge_code=","1"
           ) |>
             httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
             content("text", encoding = "UTF-8") |>
@@ -89,17 +102,13 @@ getdata <-
         var_id |>
         purrr::map_df(function(z){
           paste0(get_url(info = "data"),
-                 "&id=",
-                 z,
-                 "&ag=",
-                 ag,
-                 "&periodo=",
-                 period |> paste0(collapse = ","),
-                 "&filtro=",
-                 geo_id,
-                 "&sort=",
-                 sort,
-                 "&formato=json"
+                 "&id=",z,
+                 "&ag=",ag,
+                 "&periodo=",period |> paste0(collapse = ","),
+                 "&filtro=",geo_id |> paste0(collapse = ","),
+                 "&sort=",sort,
+                 "&formato=json",
+                 "&use_ibge_code=","1"
           ) |>
             httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
             content("text", encoding = "UTF-8") |>
@@ -116,7 +125,13 @@ getdata <-
                     "value" = "valor",
                     "unit" = "un_medida",
                     "note" = "nota") |>
-      dplyr::mutate(unit = as.integer(unit)) |>
+      dplyr::mutate(unit = as.integer(unit),
+                    value =
+                      value |>
+                      stringr::str_replace_all(pattern = "\\.", replacement = "") |>
+                      stringr::str_replace_all(pattern = ",", replacement = "\\.") |>
+                      as.numeric(),
+                    year = as.integer(year)) |>
       dplyr::select(var_id,geo_id,year,value, unit, note)
 
 
@@ -137,6 +152,19 @@ getdata <-
 
         dplyr::select(var_id, var_name, geo_id, geo_name, year, value, um_name, note) |>
         dplyr::rename(unit = um_name)
+
+      #break var_name
+      if(var_name_break == TRUE){
+        x <-
+          x |>
+          dplyr::mutate(var_name = stringr::str_sub(var_name, start = 2)) |>
+          tidyr::separate_wider_delim(
+            cols = var_name,
+            delim = "\\",
+            too_few = "align_start",
+            names_sep = "_"
+          )
+      }
     }
 
     return(x)

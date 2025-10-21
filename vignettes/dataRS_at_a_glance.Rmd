@@ -1,0 +1,76 @@
+---
+title: "dataRS_at_a_glance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dataRS_in_a_glimpse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.width = 10, 
+  fig.height = 10,
+  comment = "#>"
+)
+```
+
+#dataRS package at a glance: a tutorial for lazy people
+
+##1) Install and load
+```{r setup, warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+#Installation from github
+library(devtools)
+#devtools::install_github("fernandoilcruz/dataRS")
+
+#Load the package
+library(dataRS)
+```
+
+##2) Set API key
+```{r warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+#You can hardcode your API key (not recommended)
+#dataRS::set_api_key("your_api_key_here")
+
+#Or save it in your .Renviron file as a global variable (more appropriate)
+my_key <- Sys.getenv("MY_API_KEY")
+dataRS::set_api_key(key = my_key)
+```
+
+##3) Select variables by ID
+For this example, we will collect all IDs related to the population estimates by RIPSA.
+```{r warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+my_vars <- 
+  dataRS::vars() |>
+  dplyr::filter(stringr::str_detect(var_name,"RIPSA")) |>
+  dplyr::select(var_id) |>
+  dplyr::pull()
+```
+
+##4) Select geographic region by ID
+For this example, we will select Coredes Hortênsias and Metropolitano-Delta do Jacuí.
+```{r warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+my_geo <- 
+  dataRS::geoagreg(ag = "corede") |>
+  dplyr::filter(stringr::str_detect(geo_name,"Hortênsias") | stringr::str_detect(geo_name,"Metropolitano")) |>
+  dplyr::select(geo_id) |>
+  dplyr::pull()
+```
+
+#5) Check if data is available for your selections (optional)
+```{r warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+my_vars |>
+  purrr::set_names() |>
+  purrr::map(
+    function(x){
+      dataRS::available(x, ag = "corede")
+      }
+    )
+```
+
+##6) Download data
+```{r warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+my_data <- 
+  dataRS::getdata(var_id = my_vars, ag = "corede", geo_id = my_geo, period = "all", add_labels = TRUE)
+```

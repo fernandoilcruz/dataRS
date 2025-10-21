@@ -9,7 +9,7 @@
 #'
 #' @examples
 #'\dontrun{
-#set_api_key("your_api_key_here")
+#'set_api_key("your_api_key_here")
 #'}
 #'
 #'
@@ -19,6 +19,8 @@ set_api_key <- function(key) {
   }
   Sys.setenv(MY_API_KEY = key)
   invisible(TRUE)
+
+  check_valid_api_key()
 }
 
 

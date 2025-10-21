@@ -1,7 +1,6 @@
 #' List, filter and sort variables' ID and name
 #'
 #' @param sort Optional. A character string. Either "ASC" to sort from A to Z or "DESC" to sort from Z to A.
-#' @param filters Optional. A character string to filter from the list of variables.
 #'
 #' @return a tibble
 #'
@@ -19,46 +18,38 @@
 #'
 #'
 vars <-
-  function(
-    #filters = NULL,
-    sort="ASC"){
+  function(sort = "ASC") {
 
-    #Return url
-    if(is.null(sort)){
-      url <- paste0("https://dados.dee.rs.gov.br/api/var_list.php")
-    }else{
-      if(sort == "ASC"){
-        url <- paste0("https://dados.dee.rs.gov.br/api/var_list.php?sort=",sort)
-      }else{
-        if(sort == "DESC"){
-          url <- paste0("https://dados.dee.rs.gov.br/api/var_list.php?sort=",sort)
-        }else{
-          stop("Error. Choose ASC or DESC when using the optional argument sort.")
-        }
-      }
-    }
+  # Validate 'sort' argument
+  allowed_sorts <- c("ASC", "DESC", NULL)
 
-    #Return vars list
-    vars_list <- jsonlite::fromJSON(url) |>
-      tibble::as_tibble() |>
-      dplyr::rename(var_id = id,
-                    var_name = nome)
-
-
-    # #Return vars list
-    # if(is.null(filters)){
-    #   vars_list <- jsonlite::fromJSON(url) |>
-    #     tibble::as_tibble() |>
-    #     dplyr::rename(var_id = id,
-    #                   var_name = nome)
-    # }else{
-    #   vars_list <- jsonlite::fromJSON(url) |>
-    #     tibble::as_tibble() |>
-    #     dplyr::rename(var_id = id,
-    #                   var_name = nome) |>
-    #     dplyr::filter(stringr::str_detect(string = var_name, pattern = filters))
-    # }
-
-    return(vars_list)
-
+  if (!is.null(sort) && !sort %in% allowed_sorts) {
+    stop("Error: 'sort' must be either 'ASC', 'DESC', or NULL.")
   }
+
+  # Construct URL
+  base_url <- get_url(info = "var_list")
+
+  if (!is.null(sort)) {
+    url <- paste0(base_url, "&sort=", sort)
+  } else {
+    url <- base_url
+  }
+
+  # Fetch and parse data
+  vars_list <- tryCatch(
+    {
+      res <-
+        url |>
+        jsonlite::fromJSON() |>
+        tibble::as_tibble() |>
+        dplyr::rename(var_id = id, var_name = nome)
+
+    },
+    error = function(e) {
+      stop("Failed to fetch or parse variable list from the API: ", e$message)
+    }
+  )
+
+  return(vars_list)
+}

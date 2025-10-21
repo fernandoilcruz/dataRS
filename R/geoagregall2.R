@@ -2,8 +2,6 @@
 #'
 #' @description Check ID and name of all geographic aggregations in selected periods. Default is all periods.
 #' @param period The year to consult. It allows single string (ex:2010), vector(ex:c(2010,2022) or NULL)
-#' @param key The key to access the DataVis API. Check www.datavis.dee.rs.gov.br to learn more.
-
 #'
 #' @return a tibble.
 #' @export
@@ -18,7 +16,7 @@
 #' }
 #'
 geoagregall2 <-
-  function(period = NULL, key){
+  function(period = NULL){
 
     #check arguments
     checkmate::assert_numeric(period, null.ok = T)
@@ -30,7 +28,8 @@ geoagregall2 <-
 
         paste0(get_url(info = "composicao_ag_all"),
                "&periodo=",
-               paste0(period,collapse = ",")
+               paste0(period,collapse = ","),
+               "&use_ibge_code=","1"
         )
     )
 

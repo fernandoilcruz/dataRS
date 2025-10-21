@@ -8,8 +8,6 @@ vars(sort = "ASC")
 }
 \arguments{
 \item{sort}{Optional. A character string. Either "ASC" to sort from A to Z or "DESC" to sort from Z to A.}
-
-\item{filters}{Optional. A character string to filter from the list of variables.}
 }
 \value{
 a tibble

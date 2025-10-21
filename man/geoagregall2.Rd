@@ -4,12 +4,10 @@
 \alias{geoagregall2}
 \title{All Geographic Aggregation}
 \usage{
-geoagregall2(period = NULL, key)
+geoagregall2(period = NULL)
 }
 \arguments{
 \item{period}{The year to consult. It allows single string (ex:2010), vector(ex:c(2010,2022) or NULL)}
-
-\item{key}{The key to access the DataVis API. Check www.datavis.dee.rs.gov.br to learn more.}
 }
 \value{
 a tibble.

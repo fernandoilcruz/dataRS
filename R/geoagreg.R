@@ -47,7 +47,8 @@ geoagreg <-
       paste0(
         get_url(info = "ag"),
         "&ag=",ag,
-        "&sort=",sort
+        "&sort=",sort,
+        "&use_ibge_code=","1"
         )
 
 

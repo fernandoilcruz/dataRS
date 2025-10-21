@@ -2,7 +2,7 @@
 % Please edit documentation in R/getdata.R
 \name{getdata}
 \alias{getdata}
-\title{Download data from DEEDados}
+\title{Download data from DataRS}
 \usage{
 getdata(
   var_id,
@@ -10,37 +10,43 @@ getdata(
   period = "all",
   geo_id = NULL,
   sort = "ASC",
-  add_labels = FALSE
+  add_labels = FALSE,
+  var_name_break = TRUE
 )
 }
 \arguments{
 \item{var_id}{The variable's ID.}
 
-\item{ag}{The regional aggregation. There are  four valid options:
+\item{ag}{The regional aggregation. There are  five valid options:
 \itemize{
 \item "municipio" (the default): for municipalities.
 \item "regfunc": for functional regions, a state-specific planning regionalization only applied to Rio Grande do Sul.
 \item "corede": for coredes, a state-specific planning regionalization only applied to Rio Grande do Sul.
 \item "meso": for IBGE's mesoregions.
 \item "micro": for IBGE's microregions.
+\item "estado": for the state of Rio Grande do Sul
 }}
 
 \item{period}{The year to consult. It allows single string (ex:2010), vector(ex:c(2010,2022) or "all")}
 
+\item{geo_id}{Optional parameter. Filters a specific municipality, regional function, corede, mesorregion, microrregion or state ID. Default is NULL.}
+
 \item{sort}{If the user wants to sort from "ASC" for ascendent order or "DESC" for descendent order. Default is "ASC".}
 
 \item{add_labels}{Allows the user to add labels to the results}
+
+\item{var_name_break}{Breaks the var_name path into columns when add_labels = TRUE. Default is TRUE.}
 }
 \value{
 a data.frame
 }
 \description{
-This function allows the user to download data from DEEDados API using R.
+This function allows the user to download data from DataRS API using R.
 }
 \examples{
 \dontrun{
 #Example 1
-my_data <- getdata(var_id = 4603,ag = "corede",period = c(2016,2017), add_labels = TRUE)
+my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=FALSE)
 print(my_data)
 
 #Example 2

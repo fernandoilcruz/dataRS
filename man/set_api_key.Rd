@@ -17,6 +17,7 @@ This function allows users to set the API key.
 }
 \examples{
 \dontrun{
+set_api_key("your_api_key_here")
 }
 
 

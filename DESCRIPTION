@@ -1,20 +1,18 @@
-Package: datavisR
-Title: Download Data directly from DataVis API
+Package: dataRS
+Title: Download Data directly from DataRS API
 Version: 0.0.0.9000
 Authors@R: 
     person("Fernando", "Cruz", , "fernando-cruz@spgg.rs.gov.br", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: datavisR package allows users to download data directly from the DataVis API for Municipalities, Coredes, Functional Regions, Macroregions and Microregions.
-License:  MIT + file LICENSE
+Description: dataRS package allows users to download data directly from the DataRS API for Municipalities, Coredes, Functional Regions, Macroregions and Microregions.
+License: MIT + file LICENSE
 Imports: jsTreeR, jsonlite, tidyverse, httr, checkmate, dplyr, lubridate, purrr, stringr, tibble, tidyr, utils, shiny
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-
-

@@ -23,7 +23,7 @@ vardetails <-
     n <- length(var_id)
 
     if(missing(var_id)){
-      stop("Choose an ID for the var_id argument. You can use the datavisR::vars function to search for the id you wish.")
+      stop("Choose an ID for the var_id argument. You can use the dataRS::vars function to search for the id you wish.")
     }else{
       if(n == 1){
         x <- paste0(get_url(info = "var"),

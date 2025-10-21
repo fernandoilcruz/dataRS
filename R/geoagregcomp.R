@@ -64,7 +64,8 @@ geoagregcomp <-
       get_url(info = "composicao_ag"),
       "&ag=",ag,
       "&id=",geo_id,
-      "&periodo=",period
+      "&periodo=",period,
+      "&use_ibge_code=","1"
       )
 
     #output

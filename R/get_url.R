@@ -25,7 +25,7 @@ get_url <- function(info) {
                         paste(infos, collapse = ", "))}
 
   # Construct the URL
-  root_url <- "https://datavis.dee.rs.gov.br/api/"
+  root_url <- "https://data.rs.gov.br/api/"
   #root_url <- "10.112.42.22/api/"
 
   info_url <- paste0(info,".php?")
