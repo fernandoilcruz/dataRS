@@ -53,12 +53,6 @@ getdata <-
     if((missing(ag)) || (!ag %in% ags)){stop(paste0("Error: Select a valid argument for ag. The ag argument is only available for "),
                           paste(ags, collapse = ", "))}
 
-    #if(missing(period)){stop("Error: Select a valid argument for period")}
-
-    #treat var_id
-    # if(any(var_id == "all")){
-    #   var_id <- vars() |> dplyr::select(var_id) |> dplyr::pull()
-    # }
 
     for(i in 1:length(var_id)){
       available_periods <- available(var_id = var_id[i], ag = ag)
@@ -66,13 +60,6 @@ getdata <-
       if(is.numeric(period) & (any(!period %in% available_periods))){stop(available_periods$message)}
     }
 
-
-    #ARGUMENTO FORÇADO####################################ALOOOOOOOOW
-    # var_id <- c(3755, 4784)
-    # ag = "municipio"
-    # period = "all"
-    # sort = "ASC"
-    # geo_id = NULL
 
     #output
     if(is.null(geo_id)){
@@ -170,19 +157,3 @@ getdata <-
     return(x)
 
   }
-
-
-#teste
-# inicio <- Sys.time()
-# getdata(var_id = c(3755,4784), ag = "municipio")
-# fim <- Sys.time()
-# tempo <- fim-inicio
-
-# inicio <- Sys.time()
-# teste <- vars() |> dplyr::select(var_id) |> dplyr::pull()
-# getdata(var_id = "all", ag = "meso")
-# fim <- Sys.time()
-# tempo <- fim-inicio
-# library(beepr)
-# beep(sound = 3)
-
