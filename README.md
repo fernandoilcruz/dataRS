@@ -1,9 +1,9 @@
-# datavisR: an R package for DataVis API database
+# dataRS: an R package for DataRS API database
 
 ## Introduction <img src="man/figures/logo.png" align="right" height="150" alt="" />
 
-datavisR is an R package for downloading socioeconomic data for the state of Rio Grande do Sul using DataVis API.
-The API documentation can be accessed [here](https://datavis.dee.rs.gov.br/api/).
+dataRS is an R package for downloading socioeconomic data for the state of Rio Grande do Sul using DataVis API.
+The API documentation can be accessed [here](https://datars.dee.rs.gov.br/api/).
 
  
 ## Installation via GitHub
@@ -11,4 +11,4 @@ The API documentation can be accessed [here](https://datavis.dee.rs.gov.br/api/)
 ```r
 library(devtools)
 
-devtools::install_github("fernandoilcruz/datavisR", build_vignettes = TRUE)
+devtools::install_github("fernandoilcruz/dataRS", build_vignettes = TRUE)
