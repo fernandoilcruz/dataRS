@@ -37,7 +37,9 @@ geoagregall2 <-
     #output
     x <-
       url |>
-      httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+      httr::GET(timeout(1000000),
+                add_headers("Integra-Key" = get_api_key()),
+                config = config(ssl_verifypeer = 0)) |>
       content("text", encoding = "UTF-8") |>
       jsonlite::fromJSON() |>
       tibble::as_tibble() |>

@@ -21,7 +21,9 @@ tree <-
 
     url_arvore <- get_url(info = "arvore")
 
-    api <- httr::GET(url_arvore, timeout(1000000), config = config(ssl_verifypeer = 0))
+    api <- httr::GET(url_arvore, timeout(1000000),
+                     add_headers("Integra-Key" = get_api_key()),
+                     config = config(ssl_verifypeer = 0))
 
     api_content <- base::rawToChar(api$content)
 

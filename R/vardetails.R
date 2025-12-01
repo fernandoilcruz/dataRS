@@ -28,7 +28,9 @@ vardetails <-
       if(n == 1){
         x <- paste0(get_url(info = "var"),
                     "&id=",var_id) |>
-          httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+          httr::GET(timeout(1000000),
+                    add_headers("Integra-Key" = get_api_key()),
+                    config = config(ssl_verifypeer = 0)) |>
           content("text", encoding = "UTF-8") |>
           jsonlite::fromJSON() |>
           tibble::as_tibble() |>
@@ -48,7 +50,9 @@ vardetails <-
           purrr::map_df(.f = function(var_id){
             paste0(get_url(info = "var"),
                    "&id=",var_id) |>
-              httr::GET(timeout(1000000), config = config(ssl_verifypeer = 0)) |>
+              httr::GET(timeout(1000000),
+                        add_headers("Integra-Key" = get_api_key()),
+                        config = config(ssl_verifypeer = 0)) |>
               content("text", encoding = "UTF-8") |>
               jsonlite::fromJSON() |>
               tibble::as_tibble() |>
