@@ -3,7 +3,7 @@
 ## Introduction <img src="man/figures/logo.png" align="right" height="150" alt="" />
 
 dataRS is an R package for downloading socioeconomic data for the state of Rio Grande do Sul using DataRS API.
-The API documentation can be accessed [here](https://data.rs.gov.br/api/).
+The API documentation can be accessed [here](https://integra.ped.rs.gov.br/api-details#api=dee-dados-hml).
 
 ## API Key
 Before using the package, you must obtain an API key for private use. Refer to the API section on the [DataRS website](https://data.rs.gov.br/index.php) for instructions.
