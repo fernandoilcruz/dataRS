@@ -121,7 +121,9 @@ getdata <-
                       value |>
                       #stringr::str_replace_all(pattern = "\\.", replacement = "") |>
                       #stringr::str_replace_all(pattern = ",", replacement = "\\.") |>
-                      as.numeric(),
+                      #as.numeric()
+                      as.character()
+                    ,
                     year = as.integer(year)) |>
       dplyr::select(var_id,geo_id,year,value, unit, note)
 
