@@ -11,7 +11,7 @@ getdata(
   geo_id = NULL,
   sort = "ASC",
   add_labels = FALSE,
-  var_name_break = TRUE
+  var_name_break = FALSE
 )
 }
 \arguments{
@@ -46,7 +46,7 @@ This function allows the user to download data from DataRS API using R.
 \examples{
 \dontrun{
 #Example 1
-my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=FALSE)
+my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=TRUE)
 print(my_data)
 
 #Example 2

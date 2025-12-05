@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #' #Example 1
-#' my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=FALSE)
+#' my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=TRUE)
 #' print(my_data)
 #'
 #' #Example 2
@@ -43,7 +43,7 @@ getdata <-
            geo_id = NULL,
            sort = "ASC",
            add_labels = FALSE,
-           var_name_break = TRUE){
+           var_name_break = FALSE){
 
 
     #check available arguments
@@ -119,8 +119,8 @@ getdata <-
       dplyr::mutate(unit = as.integer(unit),
                     value =
                       value |>
-                      stringr::str_replace_all(pattern = "\\.", replacement = "") |>
-                      stringr::str_replace_all(pattern = ",", replacement = "\\.") |>
+                      #stringr::str_replace_all(pattern = "\\.", replacement = "") |>
+                      #stringr::str_replace_all(pattern = ",", replacement = "\\.") |>
                       as.numeric(),
                     year = as.integer(year)) |>
       dplyr::select(var_id,geo_id,year,value, unit, note)

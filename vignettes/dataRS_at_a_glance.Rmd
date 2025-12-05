@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-#dataRS package at a glance: a tutorial for lazy people
+#dataRS package at a glance
 
 ##1) Install and load
 ```{r setup, warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
