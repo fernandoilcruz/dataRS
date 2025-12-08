@@ -56,14 +56,14 @@ getdata <-
 
     for(i in 1:length(var_id)){
       available_periods <- available(var_id = var_id[i], ag = ag)
-      if(period == "all" & (is.null(available_periods$period))){stop(available_periods$message)}
-      if(is.numeric(period) & (any(!period %in% available_periods))){stop(available_periods$message)}
+      if(any(period) == "all" & (is.null(available_periods$periods))){stop(available_periods$message)}
+      if(is.numeric(period) & (any(!period %in% available_periods$periods))){stop(available_periods$message)}
     }
 
 
     #output
     if(is.null(geo_id)){
-      x<-
+      x <-
         var_id |>
         purrr::map_df(function(z){
           paste0(get_url(info = "data"),
