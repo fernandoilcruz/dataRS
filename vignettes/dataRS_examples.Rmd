@@ -62,46 +62,105 @@ data_soy_state <-
 
 
 ```{r warning = FALSE, message = FALSE, results = TRUE, echo = TRUE}
-map_rs <-
+map_rs_mapa <-
   geobr::read_municipality(
     code_muni = "RS",
     year = 2020
-  ) |>
+  )
+
+anos <- data_soy_mun |> select(year) |> pull() |> unique()
+
+lista <- list()
+for(i in 1:length(anos)){
+  lista[[i]] <-
+    map_rs_mapa |>
+    mutate(year = anos[i])
+}
+
+map_rs_mapa2 <- lista |> map_df(bind_rows)
+
+
+map_rs <-
+  map_rs_mapa2 |>
   dplyr::left_join(
     data_soy_mun,
-    by = c("code_muni" = "geo_id")
+    by = c("code_muni" = "geo_id",
+           "year" = "year")
   )
 
 
 
 
-p_map1 <- 
+# p_map1 <- 
+#   map_rs |>
+#   ggplot() +
+#   geom_sf( 
+#           aes(fill = `percent change`), 
+#           color = "lightgray", 
+#           size = .15) +
+#   labs(title = "Var. % do Rendimento Médio da Produção de Soja",
+#        caption = 'Fonte: DataRS', size = 8) +
+#   # scale_fill_distiller(palette = "RdYlGn",
+#   #                      name = "Var. % do Rendimento",
+#   #                      breaks = c(-50, -25, -10, 10, 25, 50),
+#   #                      direction = "horizontal") +
+# scale_fill_stepsn(
+#   name = "Var. % do Rendimento",
+#   breaks = c(-50, -25, 0, 25, 50),
+#   colours = c("#D7191C", "#FDAE61", "#FFFFBF", "#A6D96A", "#1A9641"),
+#   #limits = c(-50, 50)
+# ) +
+#   gganimate::transition_manual(year) +
+#   labs( title = "Ano: {current_frame}") +
+#   # transition_states(Ano,transition_length = 10, state_length = 1) +
+#   # labs(title = "Ano: {closest_state}") +
+#   # transition_time(as.integer(Ano)) +
+#   # labs(title = "Ano: {as.integer(frame_time)}") +
+#   theme_minimal()
+
+
+
+p_map1 <-
   map_rs |>
   ggplot() +
-  geom_sf( 
-          aes(fill = `percent change`), 
-          color = "lightgray", 
-          size = .15) +
-  labs(title = "Var. % do Rendimento Médio da Produção de Soja",
-       caption = 'Fonte: DataRS', size = 8) +
-  scale_fill_distiller(palette = "RdYlGn",
-                       name = "Var. % do Rendimento",
-                       direction = "horizontal") + 
+  geom_sf(
+    aes(
+      fill = 
+        cut(
+        `percent change`,
+        breaks = c(-Inf, -25, 0, 25, Inf),
+        labels = c("< -25%", "-25% a 0%", "0% a 25%", "> 25%"),
+        right = TRUE
+      ) |>
+        forcats::fct_rev()
+    ),
+    color = "lightgray",
+    size = 0.15
+  ) +
+  labs(
+    title = "Var. % do Rendimento Médio da Produção de Soja",
+    caption = "Fonte: DataRS",
+    fill = "Var. % do Rendimento"
+  ) +
+  scale_fill_manual(
+    values = c(
+      "> 25%" = "#A6D96A",
+      "0% a 25%" =  "#FFFFBF",
+      "-25% a 0%" = "#FDAE61",
+      "< -25%" = "#D7191C"
+    ),
+    na.value = "gray95"
+  ) +
   gganimate::transition_manual(year) +
-  labs( title = "Ano: {current_frame}") +
-  # transition_states(Ano,transition_length = 10, state_length = 1) +
-  # labs(title = "Ano: {closest_state}") +
-  # transition_time(as.integer(Ano)) +
-  # labs(title = "Ano: {as.integer(frame_time)}") +
+  labs(title = "Ano: {current_frame}") +
   theme_minimal()
+  
 
 
 p_anim1 <- animate(p_map1,
                    nframes = 500,
                    #duration = 20,
                    renderer = gifski_renderer())
-
-
 
 
 
@@ -122,8 +181,8 @@ rend_estado <-
   theme_minimal()
 
 p_anim2 <- animate(rend_estado,
-                   nframes = 31,
-                   #nframes = 500,
+                   #nframes = 31,
+                   nframes = 500,
                    #duration = 20,
                    renderer = gifski_renderer())
 
@@ -132,7 +191,7 @@ b_mgif <- image_read(p_anim2)
 
 
 new_gif <- image_append(c(a_mgif[1], b_mgif[1]), stack = FALSE)
-for(i in 2:31){
+for(i in 2:500){
   combined <- image_append(c(a_mgif[i], b_mgif[i]), stack = FALSE)
   new_gif <- c(new_gif, combined)
 }
