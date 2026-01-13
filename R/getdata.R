@@ -28,7 +28,7 @@
 #' @examples
 #' \dontrun{
 #' #Example 1
-#' my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=FALSE)
+#' my_data<-getdata(var_id=4603,ag ="corede",period=c(2016,2017),add_labels=TRUE,var_name_break=TRUE)
 #' print(my_data)
 #'
 #' #Example 2
@@ -43,7 +43,7 @@ getdata <-
            geo_id = NULL,
            sort = "ASC",
            add_labels = FALSE,
-           var_name_break = TRUE){
+           var_name_break = FALSE){
 
 
     #check available arguments
@@ -56,14 +56,14 @@ getdata <-
 
     for(i in 1:length(var_id)){
       available_periods <- available(var_id = var_id[i], ag = ag)
-      if(period == "all" & (is.null(available_periods$period))){stop(available_periods$message)}
-      if(is.numeric(period) & (any(!period %in% available_periods))){stop(available_periods$message)}
+      if(any(period) == "all" & (is.null(available_periods$periods))){stop(available_periods$message)}
+      if(is.numeric(period) & (any(!period %in% available_periods$periods))){stop(available_periods$message)}
     }
 
 
     #output
     if(is.null(geo_id)){
-      x<-
+      x <-
         var_id |>
         purrr::map_df(function(z){
           paste0(get_url(info = "data"),
@@ -122,6 +122,7 @@ getdata <-
                       stringr::str_replace_all(pattern = "\\.", replacement = "") |>
                       stringr::str_replace_all(pattern = ",", replacement = "\\.") |>
                       as.numeric(),
+                      #as.character(),
                     year = as.integer(year)) |>
       dplyr::select(var_id,geo_id,year,value, unit, note)
 

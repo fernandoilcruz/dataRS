@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-#dataRS package at a glance: a tutorial for lazy people
+#dataRS package at a glance
 
 ##1) Install and load
 ```{r setup, warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
@@ -74,3 +74,13 @@ my_vars |>
 my_data <- 
   dataRS::getdata(var_id = my_vars, ag = "corede", geo_id = my_geo, period = "all", add_labels = TRUE)
 ```
+
+
+##EXTRA
+The dataRS package also provides additional regionalization schemes that can be linked to municipalities.
+
+```{r warning = FALSE, message = FALSE, results = FALSE, echo = TRUE}
+data("geo_complement")
+geo_complement
+```
+
