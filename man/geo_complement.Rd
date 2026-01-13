@@ -11,7 +11,7 @@ A data frame
 \item{Município}{Municipalities}
 \item{Mesorregiões}{Mesorregions}
 \item{Microrregião}{Microrregions}
-\item{\verb{Região de Saúde}}{State health department Regions}
+\item{Região de Saúde}{State health department Regions}
 \item{CRS}{Regional health coordination offices Regions}
 \item{Coredes}{Regional Development Councils Regions}
 \item{RF}{Planning Functional Regions}
