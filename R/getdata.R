@@ -118,7 +118,7 @@ getdata <-
                     "note" = "nota") |>
       dplyr::mutate(unit = as.integer(unit),
                     value =
-                       value, #|>
+                      value, #|>
                       # stringr::str_replace_all(pattern = "\\.", replacement = "") |>
                       # stringr::str_replace_all(pattern = ",", replacement = "\\.") |>
                       # as.numeric(),
