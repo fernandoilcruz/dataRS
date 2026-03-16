@@ -54,12 +54,43 @@ getdata <-
                           paste(ags, collapse = ", "))}
 
 
+
+    #Check available periods for var_id and save it to an object for later usage
+    var_id_warning <- c()
     for(i in 1:length(var_id)){
-      available_periods <- available(var_id = var_id[i], ag = ag)
-      if(any(period) == "all" & (is.null(available_periods$periods))){stop(available_periods$message)}
-      if(is.numeric(period) & (any(!period %in% available_periods$periods))){stop(available_periods$message)}
+
+      print(paste0("Checking available periods for var_id ", var_id[i]))
+
+      withCallingHandlers({
+
+        available_periods <- available(var_id = var_id[i], ag = ag)
+
+        if((is.null(available_periods$periods)) |
+           (is.numeric(period) && any(!period %in% available_periods$periods))){
+
+          warning(available_periods$message)
+        }
+
+      }, warning = function(w){
+
+        var_id_warning <<- c(var_id_warning, var_id[i])
+
+        #Print warning
+        message("Warning: ", conditionMessage(w))
+
+        # Avoid double print
+        invokeRestart("muffleWarning")
+      })
     }
 
+
+
+
+
+    #Drops var_ids with warning message
+    print(paste0("var_id's ",var_id_warning, " will be ignored"))
+
+    var_id <- var_id[!var_id %in% var_id_warning]
 
     #output
     if(is.null(geo_id)){
